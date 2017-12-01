@@ -6,23 +6,29 @@ namespace CGS {
     /// </summary>
     public class ArtPiece {
         private string pieceID;
-        public string PieceID { get; set; }
+        public string PieceID { get { return pieceID; } set { pieceID = value; } }
         private string title;
-        public string Title { get; set; }
+        public string Title { get { return title; } set { title = value; } }
         private string year;
-        public string Year { get; set; }
+        public string Year { get { return year; } set { year = value; } }
 
         private double price;
-        public double Price { get; set; }
+        public double Price { get { return price; } set { price = value; } }
         private double estimate;
-        public double Estimate { get; set; }
+        public double Estimate { get { return estimate; } set { estimate = value; } }
         private string artistID;
-        public string ArtistID { get; set; }
+        public string ArtistID { get { return artistID; } set { artistID = value; } }
         private string curatorID;
-        public string CuratorID { get; set; }
+        public string CuratorID { get { return curatorID; } set { curatorID = value; } }
         private char status;
-        public char Status { get; set; }
-        public ArtPiece () {
+        public char Status { get { return status; } set { status = value; } }
+        public ArtPiece (string PieceID, string Title, string Year, double Estimate, string ArtistID, string CuratorID) {
+            this.pieceID = PieceID;
+            this.title = Title;
+            this.year = Year;
+            this.estimate = Estimate;
+            this.artistID = ArtistID;
+            this.curatorID = CuratorID;
             this.status = 'D';
             this.price = 0;
         }

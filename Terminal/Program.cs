@@ -3,38 +3,11 @@ using CGS;
 
 namespace Terminal {
     class Program {
-        public struct Artist {
-            public string ID;
-            public string fname;
-            public string lname;
-        }
-
-        public struct Curator {
-            public string ID;
-            public string fname;
-            public string lname;
-        }
-
-        public struct Artpiece {
-            public string ID;
-            public string title;
-            public string date;
-            public string IDArtist;
-            public string IDCcurator;
-            public double estimed;
-            public double price;
-            public char status;
-        }
-
-        public static Artist[] MyArtists = new Artist[5];
-        public static Curator[] MyCurators = new Curator[3];
-        public static Artpiece[] MyArtpieces = new Artpiece[10];
-        public static int ArtistIndex = 0;
-        public static int CuratorIndex = 0;
-        public static int ArtpieceIndex = 0;
+        public static Gallery gal = new Gallery ();
+        public static Curator curatorInstance = new Curator ();
+        public static EventListener eventInstance = new EventListener (curatorInstance);
 
         public static void Main (string[] args) {
-            Gallery gal = new Gallery ();
             int menu;
             do {
                 Menu ();
@@ -55,212 +28,85 @@ namespace Terminal {
                             AddArtpiece ();
                             break;
                         case 4:
-                            DisplayAllArtPieces ();
+                            Console.WriteLine ("--- Selling Art Piece ---");
+                            SellArtPiece ();
+                            curatorInstance.ClearComm ();
+                            eventInstance.Detach ();
                             break;
-                        case 5:
-                            Console.WriteLine ("--- Finding Art Piece ---");
-                            FindArtPiece ();
-                            break;
-                        case 6:
-                            Console.WriteLine ("--- Deleting Art Piece ---");
-                            DeleteArtPiece ();
-                            break;
-                        case 7:
+                        case 9:
                             Console.WriteLine ("Quiting application...");
                             break;
                         default:
-                            Console.WriteLine ("Choose a number between 1 to 7");
+                            Console.WriteLine ("Choose a number between 1 to 4");
                             break;
                     }
                 } else {
                     Console.WriteLine ("Enter integer not words");
                 }
-            } while (menu != 7);
+            } while (menu != 9);
         }
         public static void AddArtist () {
-            // check if Artist ID already exists
-            bool err;
-            string ID;
-            do {
-                err = false;
-                Console.WriteLine ("Enter ID");
-                ID = Console.ReadLine ();
-                for (int i = 0; i < ArtistIndex; i++) {
-                    if (MyArtists[i].ID == ID) {
-                        Console.WriteLine ("ID already exists.");
-                        err = true;
-                    }
-                }
-            } while (err == true);
+            Console.WriteLine ("Enter ID");
+            string ID = Console.ReadLine ();
             Console.WriteLine ("Enter first name");
             string fname = Console.ReadLine ();
             Console.WriteLine ("Enter last name");
             string lname = Console.ReadLine ();
-            MyArtists[ArtistIndex].ID = ID;
-            MyArtists[ArtistIndex].fname = fname;
-            MyArtists[ArtistIndex].lname = lname;
-            ArtistIndex++;
+            gal.AddArtist (fname, lname, ID);
+            string output = gal.ListArtists ();
+            Console.WriteLine (output);
         }
         public static void AddCurator () {
-            // check if Curator ID already exists
-            bool err;
-            string ID;
-            do {
-                err = false;
-                Console.WriteLine ("Enter ID");
-                ID = Console.ReadLine ();
-                for (int i = 0; i < CuratorIndex; i++) {
-                    if (MyCurators[i].ID == ID) {
-                        Console.WriteLine ("ID already exists.");
-                        err = true;
-                    }
-                }
-            } while (err == true);
+            Console.WriteLine ("Enter ID");
+            string ID = Console.ReadLine ();
             Console.WriteLine ("Enter first name");
             string fname = Console.ReadLine ();
             Console.WriteLine ("Enter last name");
             string lname = Console.ReadLine ();
-            MyCurators[CuratorIndex].ID = ID;
-            MyCurators[CuratorIndex].fname = fname;
-            MyCurators[CuratorIndex].lname = lname;
-            CuratorIndex++;
+            gal.AddCurator (fname, lname, ID);
+            string output = gal.ListCurators ();
+            Console.WriteLine (output);
         }
         public static void AddArtpiece () {
-            // check if Artpiece ID already exists
-            bool err;
-            string ID;
-            do {
-                err = false;
-                Console.WriteLine ("Enter ID");
-                ID = Console.ReadLine ();
-                for (int i = 0; i < ArtpieceIndex; i++) {
-                    if (MyArtpieces[i].ID == ID) {
-                        Console.WriteLine ("ID already exists.");
-                        err = true;
-                    }
-                }
-            } while (err == true);
-            Console.WriteLine ("Enter title");
-            string title = Console.ReadLine ();
-            Console.WriteLine ("Enter date");
-            string date = Console.ReadLine ();
-
-            // check if Artist actually exists
-            bool err2;
-            string IDArtist;
-            do {
-                err2 = true;
-                Console.WriteLine ("Enter Artist ID");
-                IDArtist = Console.ReadLine ();
-                for (int i = 0; i < ArtistIndex; i++) {
-                    if (MyArtists[i].ID == IDArtist) {
-                        Console.WriteLine ("Found Artist " + MyArtists[i].fname);
-                        err2 = false;
-                    }
-                }
-                if (err2) {
-                    Console.WriteLine ("Artist not found, try again!");
-                }
-            } while (err2 == true);
-
-            // check if Artist actually exists
-            bool err3;
-            string IDCurator;
-            do {
-                err3 = true;
-                Console.WriteLine ("Enter Curator ID");
-                IDCurator = Console.ReadLine ();
-                for (int i = 0; i < CuratorIndex; i++) {
-                    if (MyCurators[i].ID == IDCurator) {
-                        Console.WriteLine ("Found Curator " + MyCurators[i].fname);
-                        err3 = false;
-                    }
-                }
-                if (err3) {
-                    Console.WriteLine ("Curator not found, try again!");
-                }
-            } while (err3 == true);
-
-            Console.WriteLine ("Enter Estimed");
-            double estimed = Convert.ToDouble (Console.ReadLine ());
+            Console.WriteLine ("Enter Piece ID");
+            string ID = Console.ReadLine ();
+            Console.WriteLine ("Enter Title");
+            string Title = Console.ReadLine ();
+            Console.WriteLine ("Enter Year");
+            string Year = Console.ReadLine ();
+            Console.WriteLine ("Enter Estimate");
+            double Estimate = Convert.ToDouble (Console.ReadLine ());
+            Console.WriteLine ("Enter ArtistID");
+            string ArtistID = Console.ReadLine ();
+            Console.WriteLine ("Enter CuratorID");
+            string CuratorID = Console.ReadLine ();
+            gal.AddPiece (ID, Title, Year, Estimate, ArtistID, CuratorID);
+            string output = gal.ListPieces ();
+            Console.WriteLine (output);
+        }
+        public static void SellArtPiece () {
+            Console.WriteLine ("Enter Piece ID");
+            string ID = Console.ReadLine ();
             Console.WriteLine ("Enter Price");
-            double price = Convert.ToDouble (Console.ReadLine ());
-            Console.WriteLine ("Enter status (should be one character)");
-            char status = Console.ReadLine () [0];
-            MyArtpieces[ArtpieceIndex].ID = ID;
-            MyArtpieces[ArtpieceIndex].title = title;
-            MyArtpieces[ArtpieceIndex].date = date;
-            MyArtpieces[ArtpieceIndex].IDArtist = IDArtist;
-            MyArtpieces[ArtpieceIndex].IDCcurator = IDCurator;
-            MyArtpieces[ArtpieceIndex].estimed = estimed;
-            MyArtpieces[ArtpieceIndex].price = price;
-            MyArtpieces[ArtpieceIndex].status = status;
-            ArtpieceIndex++;
-        }
-        public static void DisplayAllArtPieces () {
-            for (int i = 0; i < ArtpieceIndex; i++) {
-                Console.WriteLine (" ---- Displaying Artpiece #" + i + " ----");
-                Console.WriteLine ("ID: " + MyArtpieces[i].ID);
-                Console.WriteLine ("Title: " + MyArtpieces[i].title);
-                Console.WriteLine ("Date: " + MyArtpieces[i].date);
-                Console.WriteLine ("ID of Artist: " + MyArtpieces[i].IDArtist);
-                Console.WriteLine ("ID of Curator: " + MyArtpieces[i].IDCcurator);
-                Console.WriteLine ("estimed: " + MyArtpieces[i].estimed);
-                Console.WriteLine ("price: " + MyArtpieces[i].price);
-                Console.WriteLine ("status: " + MyArtpieces[i].status);
+            double Price = Convert.ToDouble (Console.ReadLine ());
+            bool status = gal.SellPiece (ID, Price);
+            if (status) {
+                Console.WriteLine ("Piece sold successfully!");
+            } else {
+                Console.WriteLine ("Sale failed!");
             }
-        }
-        public static void FindArtPiece () {
-            Console.WriteLine ("Enter ArtPiece Code to find");
-            string ID = Console.ReadLine ();
-            bool found = false;
-            for (int i = 0; i < ArtpieceIndex; i++) {
-                if (MyArtpieces[i].ID == ID) {
-                    found = true;
-                    Console.WriteLine ("----- Found one! ----");
-                    Console.WriteLine (" ---- Displaying Artpiece #" + i + " ----");
-                    Console.WriteLine ("ID: " + MyArtpieces[i].ID);
-                    Console.WriteLine ("Title: " + MyArtpieces[i].title);
-                    Console.WriteLine ("Date: " + MyArtpieces[i].date);
-                    Console.WriteLine ("ID of Artist: " + MyArtpieces[i].IDArtist);
-                    Console.WriteLine ("ID of Curator: " + MyArtpieces[i].IDCcurator);
-                    Console.WriteLine ("estimed: " + MyArtpieces[i].estimed);
-                    Console.WriteLine ("price: " + MyArtpieces[i].price);
-                    Console.WriteLine ("status: " + MyArtpieces[i].status);
-                    break;
-                }
-            }
-            if (!found) {
-                Console.WriteLine ("Could not find art piece");
-            }
-        }
-        public static void DeleteArtPiece () {
-            Console.WriteLine ("Enter ArtPiece Code to delete");
-            string ID = Console.ReadLine ();
-            for (int i = 0; i < ArtpieceIndex; i++) {
-                if (MyArtpieces[i].ID == ID) {
-                    Console.WriteLine ("----- Found one to delete! ----");
-                    for (int a = i; a < MyArtpieces.Length - 1; a++) {
-                        // moving elements downwards, to fill the gap at [index]
-                        MyArtpieces[a] = MyArtpieces[a + 1];
-                    }
-                    // finally, let's decrement Array's size by one
-                    Array.Resize (ref MyArtpieces, MyArtpieces.Length - 1);
-
-                    ArtpieceIndex--;
-                    break;
-                }
-            }
+            string output = gal.ListPieces ();
+            Console.WriteLine (output);
+            output = gal.ListCurators ();
+            Console.WriteLine (output);
         }
         public static void Menu () {
             Console.WriteLine ("---- SELECT MENU ----");
             Console.WriteLine ("1. Add an artist");
             Console.WriteLine ("2. Add a curator");
-            Console.WriteLine ("3. Add an Art pieces");
-            Console.WriteLine ("4. Display all art pieces");
-            Console.WriteLine ("5. Find an art piece by code");
-            Console.WriteLine ("6. Delete an art piece");
-            Console.WriteLine ("7. Quit the application");
+            Console.WriteLine ("3. Add an Art Piece");
+            Console.WriteLine ("4. Sell Art Piece");
+            Console.WriteLine ("9. Quit the application");
             Console.WriteLine ("--------------------");
         }
     }

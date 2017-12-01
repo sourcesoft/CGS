@@ -1,33 +1,26 @@
 ﻿using System;
-using CGS;
 
-namespace CGSArtGallery
-    {
+namespace CGS {
     /// <summary>
     /// Summary description for EventListener.
     /// </summary>
-    public class EventListener
-        {
+    public class EventListener {
         private Curator curator;
 
-        public EventListener(Curator strCurator)
-            {
+        public EventListener (Curator strCurator) {
             curator = strCurator;
-            curator.Changed += new CommissionPaidHandler(CommissionChanged);
-            }
-
-        private void CommissionChanged(object sender, EventArgs e)
-            {
-            Console.WriteLine("The curator was paid commission.\n");
-            }
-
-        public void Detach()
-            {
-            // Detach the event
-            curator.Changed -= new CommissionPaidHandler(CommissionChanged);
-            curator = null;
-            }
-
-
+            curator.Changed += new CommissionPaidHandler (CommissionChanged);
         }
+
+        private void CommissionChanged (object sender, EventArgs e) {
+            Console.WriteLine ("The curator was paid commission.\n");
+        }
+
+        public void Detach () {
+            // Detach the event
+            curator.Changed -= new CommissionPaidHandler (CommissionChanged);
+            curator = null;
+        }
+
     }
+}

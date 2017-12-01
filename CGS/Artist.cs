@@ -15,8 +15,11 @@ namespace CGS {
             }
         }
         public Artist () { }
+        public Artist (string First, string Last, string ID) : base (First, Last) {
+            artistID = ID;
+        }
         public override string ToString () {
-            return ArtistID + ". " + base.FirstName + base.LastName;
+            return ArtistID + ". " + base.FirstName + " " + base.LastName;
         }
     }
 }
