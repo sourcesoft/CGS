@@ -1,9 +1,10 @@
 ﻿using System;
+using System.IO;
 using CGS;
 
 namespace Terminal {
     class Program {
-        public static Gallery gal = new Gallery ();
+        public static Gallery gal = new Gallery (true);
         public static Curator curatorInstance = new Curator ();
         public static EventListener eventInstance = new EventListener (curatorInstance);
 
@@ -33,11 +34,23 @@ namespace Terminal {
                             curatorInstance.ClearComm ();
                             eventInstance.Detach ();
                             break;
+                        case 5:
+                            Console.WriteLine ("--- List Artists ---");
+                            ListArtists ();
+                            break;
+                        case 6:
+                            Console.WriteLine ("--- List Curators ---");
+                            ListCurators ();
+                            break;
+                        case 7:
+                            Console.WriteLine ("--- List Pieces ---");
+                            ListPieces ();
+                            break;
                         case 9:
                             Console.WriteLine ("Quiting application...");
                             break;
                         default:
-                            Console.WriteLine ("Choose a number between 1 to 4");
+                            Console.WriteLine ("Choose a number between 1 to 9");
                             break;
                     }
                 } else {
@@ -52,7 +65,7 @@ namespace Terminal {
             string fname = Console.ReadLine ();
             Console.WriteLine ("Enter last name");
             string lname = Console.ReadLine ();
-            gal.AddArtist (fname, lname, ID);
+            gal.AddArtist (true, fname, lname, ID);
             string output = gal.ListArtists ();
             Console.WriteLine (output);
         }
@@ -63,7 +76,7 @@ namespace Terminal {
             string fname = Console.ReadLine ();
             Console.WriteLine ("Enter last name");
             string lname = Console.ReadLine ();
-            gal.AddCurator (fname, lname, ID);
+            gal.AddCurator (true, fname, lname, ID);
             string output = gal.ListCurators ();
             Console.WriteLine (output);
         }
@@ -80,7 +93,7 @@ namespace Terminal {
             string ArtistID = Console.ReadLine ();
             Console.WriteLine ("Enter CuratorID");
             string CuratorID = Console.ReadLine ();
-            gal.AddPiece (ID, Title, Year, Estimate, ArtistID, CuratorID);
+            gal.AddPiece (true, ID, Title, Year, Estimate, ArtistID, CuratorID);
             string output = gal.ListPieces ();
             Console.WriteLine (output);
         }
@@ -100,12 +113,28 @@ namespace Terminal {
             output = gal.ListCurators ();
             Console.WriteLine (output);
         }
+        public static void ListPieces () {
+            string output = gal.ListPieces ();
+            Console.WriteLine (output);
+        }
+        public static void ListCurators () {
+            string output = gal.ListCurators ();
+            Console.WriteLine (output);
+        }
+
+        public static void ListArtists () {
+            string output = gal.ListArtists ();
+            Console.WriteLine (output);
+        }
         public static void Menu () {
             Console.WriteLine ("---- SELECT MENU ----");
-            Console.WriteLine ("1. Add an artist");
-            Console.WriteLine ("2. Add a curator");
+            Console.WriteLine ("1. Add an Artist");
+            Console.WriteLine ("2. Add a Curator");
             Console.WriteLine ("3. Add an Art Piece");
             Console.WriteLine ("4. Sell Art Piece");
+            Console.WriteLine ("5. List Artists");
+            Console.WriteLine ("6. List Curatos");
+            Console.WriteLine ("7. List Pieces");
             Console.WriteLine ("9. Quit the application");
             Console.WriteLine ("--------------------");
         }
